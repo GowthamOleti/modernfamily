@@ -52,6 +52,11 @@
             cursor: pointer;
             border-radius: 15px;
             overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .sitcom-card:hover {
+            transform: scale(1.05);
         }
 
         .sitcom-card img {
@@ -139,6 +144,8 @@
         .episode-info {
             padding: 20px;
             text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .episode-info p {
