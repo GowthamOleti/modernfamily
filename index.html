@@ -135,7 +135,7 @@
                 const episode = episodes[randomIndex];
                 
                 // Construct Hotstar link (example link format, replace with actual logic if needed)
-                const hotstarLink = `https://www.hotstar.com/in/tv/modern-family/season-${episode.season}/episode-${episode.number}`;
+                const hotstarLink = `https://www.hotstar.com/in/tv/modern-family/season-${episode.season}/episode-${episode.number}/${episode.id}`;
                 
                 document.querySelector('.episode-text h2').innerText = `Season: ${episode.season} Episode: ${episode.number}`;
                 document.querySelector('.episode-info p').innerHTML = episode.summary;
@@ -147,3 +147,4 @@
     </script>
 </body>
 </html>
+
