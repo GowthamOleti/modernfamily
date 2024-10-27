@@ -139,7 +139,7 @@
                 
                 document.querySelector('.episode-text h2').innerText = `Season: ${episode.season} Episode: ${episode.number}`;
                 document.querySelector('.episode-info p').innerHTML = episode.summary;
-                document.getElementById('watchLink').addEventListener('click', () => window.open(googleSearchLink, '_blank'));
+                document.getElementById('watchLink').onclick = function() { window.open(googleSearchLink, '_blank'); };
             } catch (error) {
                 document.getElementById('episodeInfo').innerHTML = `<p>Sorry, an error occurred while fetching the episode information. Please try again later.</p>`;
             }
