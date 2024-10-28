@@ -26,7 +26,7 @@
         }
 
         .logo img {
-            width: 150px;
+            width: 200px;
         }
 
         .description {
@@ -63,7 +63,8 @@
 
         .sitcom-card img {
             width: 100%;
-            height: auto;
+            height: 400px;
+            object-fit: cover;
             border-radius: 15px;
         }
 
@@ -211,6 +212,9 @@
                 font-size: 14px;
                 padding: 12px;
             }
+            .sitcom-card img {
+                height: 400px;
+            }
         }
     </style>
 </head>
@@ -218,38 +222,15 @@
     <div class="logo">
         <img src="https://static.wixstatic.com/media/5c0589_60ceedeef5f44e83b7b21586258f4f7b~mv2.png" alt="Logo" onclick="selectRandomSitcom()">
     </div>
-    <div class="description">
-        Can't decide which episode to watch? Let us help you relive your favourite sitcom moments! Select a sitcom and we'll pick an episode for you to enjoy:
+    <div class="description" style="text-align: center;">
+        Want to rewatch your favorite TV shows but don't know where to start? Add your favorite shows to the grid and let ReBinge select a random episode for you to enjoy.
     </div>
-    <div class="grid" id="sitcomGrid">
-        <div class="sitcom-card" onclick="selectSitcom('modern family')">
-            <img src="https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg" alt="Modern Family">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('friends')">
-            <img src="https://static.wixstatic.com/media/5c0589_bf052d3f91fb42f990cf7c19d66e0062~mv2.jpg" alt="Friends">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('brooklyn 99')">
-            <img src="https://static.wixstatic.com/media/5c0589_16b29056939948ef977b92d4a7d91b38~mv2.jpg" alt="Brooklyn 99">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('the office')">
-            <img src="https://static.wixstatic.com/media/5c0589_136bfcadfbce453ea9c99692e7341405~mv2.jpg" alt="The Office">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('how i met your mother')">
-            <img src="https://static.wixstatic.com/media/5c0589_47daa59e782748f3bf345281d770ea6b~mv2.webp" alt="How I Met Your Mother">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('the big bang theory')">
-            <img src="https://static.wixstatic.com/media/5c0589_225cd4557e684396a7e5ed7d1a3434ac~mv2.jpg" alt="The Big Bang Theory">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('schitts creek')">
-            <img src="https://static.wixstatic.com/media/5c0589_a07c0c6dd2f041ffab981629e76d4395~mv2.png" alt="Schitt's Creek">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('parks and recreation')">
-            <img src="https://static.wixstatic.com/media/5c0589_6785c812d4834e6b8f94995e98358dc3~mv2.jpeg" alt="Parks and Recreation">
-        </div>
-        <div class="sitcom-card" onclick="selectSitcom('young sheldon')">
-            <img src="https://static.wixstatic.com/media/5c0589_11c1213c78784225bc728f377c1fb750~mv2.webp" alt="Young Sheldon">
-        </div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <input type="text" id="showInput" placeholder="Enter a TV show name" oninput="predictiveSearch()" style="padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+        <button id="addShowButton" style="padding: 10px 20px; font-size: 16px;" onclick="addShow()">Add Show</button>
     </div>
+    <ul id="suggestions" style="list-style: none; padding: 0; margin: 0; color: #000; background-color: #fff; border-radius: 5px; font-weight: normal; text-align: left; width: 300px; display: none;"></ul></ul>
+    <div class="grid" id="sitcomGrid"></div>
 
     <div class="overlay" id="episodeOverlay">
         <div class="container">
@@ -271,11 +252,24 @@
     </div>
 
     <script>
+        let currentSitcom = 'modern family';
+
+        // Load saved shows from localStorage when the page loads
+        window.onload = () => {
+            const savedShows = JSON.parse(localStorage.getItem('savedShows')) || [];
+            const sitcomGrid = document.getElementById('sitcomGrid');
+            savedShows.forEach(show => {
+                const sitcomCard = createSitcomCard(show);
+                sitcomGrid.appendChild(sitcomCard);
+            });
+        };
+
         function selectRandomSitcom() {
-            const sitcoms = ['modern family', 'friends', 'brooklyn 99', 'the office', 'how i met your mother', 'the big bang theory', 'schitts creek', 'parks and recreation', 'young sheldon'];
-            const randomIndex = Math.floor(Math.random() * sitcoms.length);
-            selectSitcom(sitcoms[randomIndex]);
+            const sitcomCards = document.querySelectorAll('.sitcom-card');
+            const randomIndex = Math.floor(Math.random() * sitcomCards.length);
+            sitcomCards[randomIndex].click();
         }
+
         function selectSitcom(sitcom) {
             currentSitcom = sitcom;
             document.getElementById('episodeOverlay').style.display = 'flex';
@@ -294,7 +288,6 @@
         }
 
         document.getElementById('suggestButton').addEventListener('click', () => suggestEpisode(currentSitcom));
-        let currentSitcom = 'modern family';
 
         async function suggestEpisode(sitcom) {
             try {
@@ -320,39 +313,85 @@
                 document.querySelector('.episode-info p').innerText = 'Sorry, an error occurred while fetching the episode information. Please try again later.';
             }
         }
-            function updateBannerImage(sitcom) {
-            let bannerImage = '';
-            switch (sitcom.toLowerCase()) {
-                case 'modern family':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg';
-                    break;
-                case 'friends':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_bf052d3f91fb42f990cf7c19d66e0062~mv2.jpg';
-                    break;
-                case 'brooklyn 99':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_16b29056939948ef977b92d4a7d91b38~mv2.jpg';
-                    break;
-                case 'the office':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_136bfcadfbce453ea9c99692e7341405~mv2.jpg';
-                    break;
-                case 'how i met your mother':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_47daa59e782748f3bf345281d770ea6b~mv2.webp';
-                    break;
-                case 'the big bang theory':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_225cd4557e684396a7e5ed7d1a3434ac~mv2.jpg';
-                    break;
-                case 'schitts creek':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_a07c0c6dd2f041ffab981629e76d4395~mv2.png';
-                    break;
-                case 'parks and recreation':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_6785c812d4834e6b8f94995e98358dc3~mv2.jpeg';
-                    break;
-                case 'young sheldon':
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_11c1213c78784225bc728f377c1fb750~mv2.webp';
-                    break;
-                default:
-                    bannerImage = 'https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg';
+
+        async function addShow() {
+            const showInput = document.getElementById('showInput').value;
+            if (!showInput) return;
+
+            try {
+                const response = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(showInput)}`);
+                const show = await response.json();
+
+                const sitcomGrid = document.getElementById('sitcomGrid');
+                const sitcomCard = createSitcomCard(show);
+                sitcomGrid.appendChild(sitcomCard);
+
+                // Save the show to localStorage
+                const savedShows = JSON.parse(localStorage.getItem('savedShows')) || [];
+                savedShows.push(show);
+                localStorage.setItem('savedShows', JSON.stringify(savedShows));
+
+                document.getElementById('showInput').value = '';
+                document.getElementById('suggestions').innerHTML = '';
+                document.getElementById('suggestions').style.display = 'none';
+            } catch (error) {
+                alert('Sorry, an error occurred while adding the show. Please try again later.');
             }
+        }
+
+        function createSitcomCard(show) {
+            const sitcomCard = document.createElement('div');
+            sitcomCard.className = 'sitcom-card';
+            sitcomCard.onclick = () => selectSitcom(show.name);
+
+            const img = document.createElement('img');
+            img.src = show.image ? show.image.original : 'https://via.placeholder.com/250x350?text=No+Image';
+            img.alt = show.name;
+
+            sitcomCard.appendChild(img);
+            return sitcomCard;
+        }
+
+        async function predictiveSearch() {
+            const query = document.getElementById('showInput').value;
+            if (query.length < 3) {
+                document.getElementById('suggestions').innerHTML = '';
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(query)}`);
+                const results = await response.json();
+
+                const suggestions = document.getElementById('suggestions');
+                suggestions.innerHTML = '';
+
+                results.slice(0, 5).forEach(result => {
+                    suggestions.style.display = 'block';
+                    const li = document.createElement('li');
+                    li.textContent = result.show.name;
+                    li.style.cursor = 'pointer';
+                    li.style.padding = '5px 10px';
+                    li.style.margin = '5px 0';
+                    li.onclick = () => {
+                        document.getElementById('showInput').value = result.show.name;
+                        suggestions.innerHTML = '';
+                    };
+                    suggestions.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching predictive search results:', error);
+            }
+        }
+
+        function updateBannerImage(sitcom) {
+            let bannerImage = '';
+            const sitcomCards = document.querySelectorAll('.sitcom-card');
+            sitcomCards.forEach(card => {
+                if (card.querySelector('img').alt.toLowerCase() === sitcom.toLowerCase()) {
+                    bannerImage = card.querySelector('img').src;
+                }
+            });
             document.querySelector('.banner').style.backgroundImage = `linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('${bannerImage}')`;
         }
     </script>
