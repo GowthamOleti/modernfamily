@@ -54,15 +54,6 @@
             animation: scroll 60s linear infinite;
         }
 
-        .carousel::-webkit-scrollbar {
-            height: 10px;
-        }
-
-        .carousel::-webkit-scrollbar-thumb {
-            background: #444;
-            border-radius: 10px;
-        }
-
         .carousel img {
             border-radius: 10px;
             height: 250px;
@@ -301,8 +292,78 @@
                 padding: 12px;
             }
             .sitcom-card img {
-                height: 400px;
+                height: 300px;
             }
+        }
+
+        /* Add Show Button Update */
+        #showInput {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 15px;
+            border: none;
+            background-color: #2a2a2a;
+            color: #fff;
+            transition: background-color 0.3s;
+            outline: none;
+            width: 250px;
+        }
+
+        #showInput::placeholder {
+            color: #b3b3b3;
+        }
+
+        #showInput:focus {
+            background-color: #3a3a3a;
+        }
+
+        #addShowButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 15px;
+            border: none;
+            background-color: #2a2a2a;
+            color: #fff;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+        }
+
+        #addShowButton:hover {
+            background-color: #1a1a1a;
+        }
+
+        /* Container for the input and button */
+        .input-button-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+
+        /* Predictive Search Alignment */
+        #suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0;
+            color: #000;
+            background-color: #fff;
+            border-radius: 5px;
+            font-weight: normal;
+            text-align: left;
+            width: 250px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 100;
         }
     </style>
 </head>
@@ -316,11 +377,11 @@
     <div class="carousel-container">
         <div class="carousel" id="posterCarousel"></div>
     </div>
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-        <input type="text" id="showInput" placeholder="Enter a TV show name" oninput="predictiveSearch()" style="padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
-        <button id="addShowButton" style="padding: 10px 20px; font-size: 16px;" onclick="addShow()">Add Show</button>
+    <div class="input-button-container">
+        <input type="text" id="showInput" placeholder="Enter a TV show name" oninput="predictiveSearch()">
+        <button id="addShowButton" onclick="addShow()">Add Show</button>
+        <ul id="suggestions"></ul>
     </div>
-    <ul id="suggestions" style="list-style: none; padding: 0; margin: 0; color: #000; background-color: #fff; border-radius: 5px; font-weight: normal; text-align: left; width: 300px; display: none;"></ul>
     <div class="grid" id="sitcomGrid"></div>
 
     <div class="overlay" id="episodeOverlay">
@@ -470,6 +531,7 @@
             const query = document.getElementById('showInput').value;
             if (query.length < 3) {
                 document.getElementById('suggestions').innerHTML = '';
+                document.getElementById('suggestions').style.display = 'none';
                 return;
             }
 
@@ -490,6 +552,7 @@
                     li.onclick = () => {
                         document.getElementById('showInput').value = result.show.name;
                         suggestions.innerHTML = '';
+                        suggestions.style.display = 'none';
                     };
                     suggestions.appendChild(li);
                 });
@@ -533,9 +596,6 @@
     </footer>
 
 </html>
-
-
-
 
 
 
