@@ -255,7 +255,7 @@
         <div class="container">
             <div class="banner" id="banner">
                 <div class="episode-text">
-                    <h2>Season: 8 Episode: 21</h2>
+                    <h2 id="episodeTitle">Season: 8 Episode: 21</h2>
                     <p id="sitcomName">Modern Family</p>
                 </div>
             </div>
@@ -308,12 +308,12 @@
                 const randomIndex = Math.floor(Math.random() * episodes.length);
                 const episode = episodes[randomIndex];
                 
-                // JustWatch link to search for specific episodes
+                // Update episode title with correct season and episode number
+                document.getElementById('episodeTitle').innerText = `Season: ${episode.season} Episode: ${episode.number}`;
                 
+                // Update episode summary
                 document.querySelector('.episode-info p').innerHTML = episode.summary;
                 const imdbLink = episode.url ? episode.url : `https://www.imdb.com/title/${show.externals.imdb}`;
-                document.getElementById('watchLink').onclick = function() { window.open(imdbLink, '_blank'); };
-                
                 document.getElementById('watchLink').onclick = function() { window.open(imdbLink, '_blank'); };
                 
             } catch (error) {
@@ -361,5 +361,6 @@
     </footer>
 
 </html>
+
 
 
