@@ -36,6 +36,7 @@
             max-width: 800px;
             line-height: 1.5;
             margin-bottom: 30px;
+            text-align: justify;
         }
 
         .grid {
@@ -195,6 +196,22 @@
             text-align: center;
             font-size: 16px;
         }
+
+        @media (max-width: 768px) {
+            .description {
+                font-size: 16px;
+            }
+            .episode-text h2 {
+                font-size: 20px;
+            }
+            .episode-text p {
+                font-size: 16px;
+            }
+            button, .watch-button {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -223,6 +240,15 @@
         <div class="sitcom-card" onclick="selectSitcom('the big bang theory')">
             <img src="https://static.wixstatic.com/media/5c0589_225cd4557e684396a7e5ed7d1a3434ac~mv2.jpg" alt="The Big Bang Theory">
         </div>
+        <div class="sitcom-card" onclick="selectSitcom('schitts creek')">
+            <img src="https://static.wixstatic.com/media/5c0589_a07c0c6dd2f041ffab981629e76d4395~mv2.png" alt="Schitt's Creek">
+        </div>
+        <div class="sitcom-card" onclick="selectSitcom('parks and recreation')">
+            <img src="https://static.wixstatic.com/media/5c0589_6785c812d4834e6b8f94995e98358dc3~mv2.jpeg" alt="Parks and Recreation">
+        </div>
+        <div class="sitcom-card" onclick="selectSitcom('young sheldon')">
+            <img src="https://static.wixstatic.com/media/5c0589_11c1213c78784225bc728f377c1fb750~mv2.webp" alt="Young Sheldon">
+        </div>
     </div>
 
     <div class="overlay" id="episodeOverlay">
@@ -246,7 +272,7 @@
 
     <script>
         function selectRandomSitcom() {
-            const sitcoms = ['modern family', 'friends', 'brooklyn 99', 'the office', 'how i met your mother', 'the big bang theory'];
+            const sitcoms = ['modern family', 'friends', 'brooklyn 99', 'the office', 'how i met your mother', 'the big bang theory', 'schitts creek', 'parks and recreation', 'young sheldon'];
             const randomIndex = Math.floor(Math.random() * sitcoms.length);
             selectSitcom(sitcoms[randomIndex]);
         }
@@ -282,15 +308,7 @@
                 const randomIndex = Math.floor(Math.random() * episodes.length);
                 const episode = episodes[randomIndex];
                 
-                
-                
-                
-                
                 // JustWatch link to search for specific episodes
-                
-                
-                
-                
                 
                 document.querySelector('.episode-info p').innerHTML = episode.summary;
                 const imdbLink = episode.url ? episode.url : `https://www.imdb.com/title/${show.externals.imdb}`;
@@ -323,6 +341,15 @@
                 case 'the big bang theory':
                     bannerImage = 'https://static.wixstatic.com/media/5c0589_225cd4557e684396a7e5ed7d1a3434ac~mv2.jpg';
                     break;
+                case 'schitts creek':
+                    bannerImage = 'https://static.wixstatic.com/media/5c0589_a07c0c6dd2f041ffab981629e76d4395~mv2.png';
+                    break;
+                case 'parks and recreation':
+                    bannerImage = 'https://static.wixstatic.com/media/5c0589_6785c812d4834e6b8f94995e98358dc3~mv2.jpeg';
+                    break;
+                case 'young sheldon':
+                    bannerImage = 'https://static.wixstatic.com/media/5c0589_11c1213c78784225bc728f377c1fb750~mv2.webp';
+                    break;
                 default:
                     bannerImage = 'https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg';
             }
@@ -334,4 +361,5 @@
     </footer>
 
 </html>
+
 
