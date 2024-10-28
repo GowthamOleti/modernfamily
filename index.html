@@ -199,7 +199,7 @@
 </head>
 <body>
     <div class="logo">
-        <img src="https://static.wixstatic.com/media/5c0589_60ceedeef5f44e83b7b21586258f4f7b~mv2.png" alt="Logo">
+        <img src="https://static.wixstatic.com/media/5c0589_60ceedeef5f44e83b7b21586258f4f7b~mv2.png" alt="Logo" onclick="selectRandomSitcom()">
     </div>
     <div class="description">
         Can't decide which episode to watch? Let us help you relive your favourite sitcom moments! Select a sitcom and we'll pick an episode for you to enjoy:
@@ -245,6 +245,11 @@
     </div>
 
     <script>
+        function selectRandomSitcom() {
+            const sitcoms = ['modern family', 'friends', 'brooklyn 99', 'the office', 'how i met your mother', 'the big bang theory'];
+            const randomIndex = Math.floor(Math.random() * sitcoms.length);
+            selectSitcom(sitcoms[randomIndex]);
+        }
         function selectSitcom(sitcom) {
             currentSitcom = sitcom;
             document.getElementById('episodeOverlay').style.display = 'flex';
@@ -277,12 +282,22 @@
                 const randomIndex = Math.floor(Math.random() * episodes.length);
                 const episode = episodes[randomIndex];
                 
-                // Construct Google Search link (example link format, replace with actual logic if needed)
-                const googleSearchLink = `https://www.google.com/search?q=${encodeURIComponent(`${sitcom} Season ${episode.season} Episode ${episode.number}`)}`;
                 
-                document.querySelector('.episode-text h2').innerText = `Season: ${episode.season} Episode: ${episode.number}`;
+                
+                
+                
+                // JustWatch link to search for specific episodes
+                
+                
+                
+                
+                
                 document.querySelector('.episode-info p').innerHTML = episode.summary;
-                document.getElementById('watchLink').onclick = function() { window.open(googleSearchLink, '_blank'); };
+                const imdbLink = episode.url ? episode.url : `https://www.imdb.com/title/${show.externals.imdb}`;
+                document.getElementById('watchLink').onclick = function() { window.open(imdbLink, '_blank'); };
+                
+                document.getElementById('watchLink').onclick = function() { window.open(imdbLink, '_blank'); };
+                
             } catch (error) {
                 document.querySelector('.episode-info p').innerText = 'Sorry, an error occurred while fetching the episode information. Please try again later.';
             }
@@ -319,5 +334,4 @@
     </footer>
 
 </html>
-
 
