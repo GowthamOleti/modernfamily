@@ -111,6 +111,12 @@
             border-radius: 15px;
             overflow: hidden;
             transition: transform 0.3s;
+            animation: fadeInCard 0.5s ease;
+        }
+
+        @keyframes fadeInCard {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .sitcom-card:hover {
@@ -122,6 +128,32 @@
             height: 400px;
             object-fit: cover;
             border-radius: 15px;
+        }
+
+        .remove-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #888;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, background-color 0.3s;
+        }
+
+        .remove-icon:hover {
+            background: rgba(255, 0, 0, 0.8);
+        }
+
+        .sitcom-card:hover .remove-icon {
+            opacity: 1;
         }
 
         .overlay {
@@ -408,8 +440,30 @@
             img.src = show.image ? show.image.original : 'https://via.placeholder.com/250x350?text=No+Image';
             img.alt = show.name;
 
+            const removeIcon = document.createElement('button');
+            removeIcon.className = 'remove-icon';
+            removeIcon.innerHTML = '&times;';
+            removeIcon.onclick = (e) => {
+                e.stopPropagation();
+                removeSitcomCard(sitcomCard, show.name);
+            };
+
             sitcomCard.appendChild(img);
+            sitcomCard.appendChild(removeIcon);
             return sitcomCard;
+        }
+
+        function removeSitcomCard(cardElement, showName) {
+            cardElement.style.transition = 'transform 0.5s, opacity 0.5s';
+            cardElement.style.transform = 'scale(0.8)';
+            cardElement.style.opacity = '0';
+            setTimeout(() => {
+                cardElement.remove();
+                // Remove the show from localStorage
+                let savedShows = JSON.parse(localStorage.getItem('savedShows')) || [];
+                savedShows = savedShows.filter(show => show.name !== showName);
+                localStorage.setItem('savedShows', JSON.stringify(savedShows));
+            }, 500);
         }
 
         async function predictiveSearch() {
@@ -479,6 +533,8 @@
     </footer>
 
 </html>
+
+
 
 
 
