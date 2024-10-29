@@ -607,7 +607,7 @@
 
                         if (shakeMagnitude > shakeThreshold) {
                             lastShakeTime = currentShakeTime;
-                            suggestEpisode(currentSitcom);
+                            selectRandomSitcom(); // Suggest a random episode from added shows
                         }
                     }
                 });
