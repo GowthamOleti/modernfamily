@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
     <title>ReBinge</title>
     <style>
@@ -120,22 +121,6 @@
             border-radius: 15px;
         }
 
-        .sitcom-info {
-            padding: 15px;
-            text-align: left;
-            color: #fff;
-            font-size: 16px;
-        }
-
-        .sitcom-name {
-            font-weight: 700;
-        }
-
-        .sitcom-seasons-episodes {
-            color: #b3b3b3;
-            margin-top: 5px;
-        }
-
         .remove-icon {
             position: absolute;
             top: 10px;
@@ -205,6 +190,9 @@
         }
 
         .banner {
+            background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg');
+            background-size: cover;
+            background-position: center;
             height: 300px;
             display: flex;
             align-items: center;
@@ -423,19 +411,16 @@
             const savedShows = JSON.parse(localStorage.getItem('savedShows')) || [];
             const sitcomGrid = document.getElementById('sitcomGrid');
             savedShows.forEach(show => {
-                createSitcomCard(show).then(sitcomCard => {
-                    sitcomGrid.appendChild(sitcomCard);
-                });
+                const sitcomCard = createSitcomCard(show);
+                sitcomGrid.appendChild(sitcomCard);
             });
             loadCarouselPosters();
         };
 
         function selectRandomSitcom() {
             const sitcomCards = document.querySelectorAll('.sitcom-card');
-            if (sitcomCards.length > 0) {
-                const randomIndex = Math.floor(Math.random() * sitcomCards.length);
-                sitcomCards[randomIndex].click();
-            }
+            const randomIndex = Math.floor(Math.random() * sitcomCards.length);
+            sitcomCards[randomIndex].click();
         }
 
         function selectSitcom(sitcom) {
@@ -483,16 +468,15 @@
         }
 
         async function addShow() {
-            const showInput = document.getElementById('showInput').value.trim();
+            const showInput = document.getElementById('showInput').value;
             if (!showInput) return;
 
             try {
                 const response = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(showInput)}`);
-                if (!response.ok) throw new Error('Show not found');
                 const show = await response.json();
 
                 const sitcomGrid = document.getElementById('sitcomGrid');
-                const sitcomCard = await createSitcomCard(show);
+                const sitcomCard = createSitcomCard(show);
                 sitcomGrid.appendChild(sitcomCard);
 
                 // Save the show to localStorage
@@ -508,7 +492,7 @@
             }
         }
 
-        async function createSitcomCard(show) {
+        function createSitcomCard(show) {
             const sitcomCard = document.createElement('div');
             sitcomCard.className = 'sitcom-card';
             sitcomCard.onclick = () => selectSitcom(show.name);
@@ -516,26 +500,6 @@
             const img = document.createElement('img');
             img.src = show.image ? show.image.original : 'https://via.placeholder.com/250x350?text=No+Image';
             img.alt = show.name;
-
-            const sitcomInfo = document.createElement('div');
-            sitcomInfo.className = 'sitcom-info';
-
-            const sitcomName = document.createElement('div');
-            sitcomName.className = 'sitcom-name';
-            sitcomName.textContent = show.name;
-
-            // Fetch season and episode information
-            const response = await fetch(`https://api.tvmaze.com/shows/${show.id}/episodes`);
-            const episodes = await response.json();
-            const totalSeasons = new Set(episodes.map(ep => ep.season)).size;
-            const totalEpisodes = episodes.length;
-
-            const seasonsEpisodes = document.createElement('div');
-            seasonsEpisodes.className = 'sitcom-seasons-episodes';
-            seasonsEpisodes.textContent = `Seasons: ${totalSeasons} Episodes: ${totalEpisodes}`;
-
-            sitcomInfo.appendChild(sitcomName);
-            sitcomInfo.appendChild(seasonsEpisodes);
 
             const removeIcon = document.createElement('button');
             removeIcon.className = 'remove-icon';
@@ -547,7 +511,6 @@
 
             sitcomCard.appendChild(img);
             sitcomCard.appendChild(removeIcon);
-            sitcomCard.appendChild(sitcomInfo);
             return sitcomCard;
         }
 
@@ -565,7 +528,7 @@
         }
 
         async function predictiveSearch() {
-            const query = document.getElementById('showInput').value.trim();
+            const query = document.getElementById('showInput').value;
             if (query.length < 3) {
                 document.getElementById('suggestions').innerHTML = '';
                 document.getElementById('suggestions').style.display = 'none';
@@ -598,6 +561,17 @@
             }
         }
 
+        function updateBannerImage(sitcom) {
+            let bannerImage = '';
+            const sitcomCards = document.querySelectorAll('.sitcom-card');
+            sitcomCards.forEach(card => {
+                if (card.querySelector('img').alt.toLowerCase() === sitcom.toLowerCase()) {
+                    bannerImage = card.querySelector('img').src;
+                }
+            });
+            document.querySelector('.banner').style.backgroundImage = `linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('${bannerImage}')`;
+        }
+
         async function loadCarouselPosters() {
             try {
                 const response = await fetch('https://api.tvmaze.com/shows');
@@ -622,3 +596,6 @@
     </footer>
 
 </html>
+
+
+
