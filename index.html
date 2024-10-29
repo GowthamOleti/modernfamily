@@ -596,61 +596,22 @@
         function initShakeEvent() {
             if ('ondevicemotion' in window) {
                 let lastShakeTime = Date.now();
-                let shakeThreshold = 20; // Increased threshold to avoid frequent triggers
+                let shakeThreshold = 25; // Increased threshold to make it a hard shake
 
                 window.addEventListener('devicemotion', function(event) {
                     let acceleration = event.accelerationIncludingGravity;
                     let currentShakeTime = Date.now();
 
-                    if (currentShakeTime - lastShakeTime > 1000) { // Limit the shake event to once every second
+                    if (currentShakeTime - lastShakeTime > 1500) { // Limit the shake event to once every 1.5 seconds
                         let shakeMagnitude = Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2);
 
                         if (shakeMagnitude > shakeThreshold) {
                             lastShakeTime = currentShakeTime;
-                            triggerConfetti();
-                            setTimeout(() => {
-                                suggestEpisode(currentSitcom);
-                            }, 500); // Added delay to ensure confetti animation starts first
+                            suggestEpisode(currentSitcom);
                         }
                     }
                 });
             }
-        }
-
-        // Trigger confetti animation
-        function triggerConfetti() {
-            const confettiColors = ["#ff0", "#f0f", "#0ff", "#fff", "#f00", "#00f", "#0f0"];
-            const numOfConfetti = 150;
-            const body = document.querySelector('body');
-            
-            for (let i = 0; i < numOfConfetti; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'fixed';
-                confetti.style.top = `${Math.random() * window.innerHeight}px`;
-                confetti.style.left = `${Math.random() * window.innerWidth}px`;
-                confetti.style.width = `${Math.random() * 8 + 2}px`;
-                confetti.style.height = `${Math.random() * 8 + 2}px`;
-                confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-                confetti.style.animation = `fall ${Math.random() * 2 + 2}s ease-out`;
-                confetti.style.opacity = 1;
-                confetti.classList.add('confetti');
-
-                body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
-            }
-
-            // Add CSS for falling animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fall {
-                    from { transform: translateY(0); }
-                    to { transform: translateY(100vh) rotate(${Math.random() * 360}deg); }
-                }
-            `;
-            document.head.appendChild(style);
         }
     </script>
 <footer style="font-size: 12px; color: #b3b3b3; margin-top: 20px; padding-bottom: 10px;">
@@ -658,5 +619,4 @@
     </footer>
 
 </html>
-
 
