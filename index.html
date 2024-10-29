@@ -596,7 +596,7 @@
         function initShakeEvent() {
             if ('ondevicemotion' in window) {
                 let lastShakeTime = Date.now();
-                let shakeThreshold = 15; // Increased threshold to make it a hard shake
+                let shakeThreshold = 25; // Increased threshold to make it a hard shake
 
                 window.addEventListener('devicemotion', function(event) {
                     let acceleration = event.accelerationIncludingGravity;
