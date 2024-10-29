@@ -596,7 +596,7 @@
         function initShakeEvent() {
             if ('ondevicemotion' in window) {
                 let lastShakeTime = Date.now();
-                let shakeThreshold = 15;
+                let shakeThreshold = 20; // Increased threshold to avoid frequent triggers
 
                 window.addEventListener('devicemotion', function(event) {
                     let acceleration = event.accelerationIncludingGravity;
@@ -608,7 +608,9 @@
                         if (shakeMagnitude > shakeThreshold) {
                             lastShakeTime = currentShakeTime;
                             triggerConfetti();
-                            suggestEpisode(currentSitcom);
+                            setTimeout(() => {
+                                suggestEpisode(currentSitcom);
+                            }, 500); // Added delay to ensure confetti animation starts first
                         }
                     }
                 });
@@ -656,4 +658,5 @@
     </footer>
 
 </html>
+
 
