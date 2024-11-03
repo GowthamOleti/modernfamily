@@ -474,6 +474,7 @@
             const sitcomCards = document.querySelectorAll('.sitcom-card');
             const randomIndex = Math.floor(Math.random() * sitcomCards.length);
             sitcomCards[randomIndex].click();
+            navigator.vibrate(100); // Vibrate when selecting a random sitcom
         }
 
         function selectSitcom(sitcom) {
@@ -482,6 +483,7 @@
             document.getElementById('sitcomName').innerText = sitcom.charAt(0).toUpperCase() + sitcom.slice(1);
             updateBannerImage(sitcom);
             suggestEpisode(sitcom);
+            navigator.vibrate(100); // Vibrate on sitcom selection
         }
 
         function closeOverlay() {
@@ -491,9 +493,13 @@
                 overlay.style.display = 'none';
                 overlay.style.animation = '';
             }, 500);
+            navigator.vibrate(100); // Vibrate on closing the overlay
         }
 
-        document.getElementById('suggestButton').addEventListener('click', () => suggestEpisode(currentSitcom));
+        document.getElementById('suggestButton').addEventListener('click', () => {
+            suggestEpisode(currentSitcom);
+            navigator.vibrate(100); // Vibrate on resuggest button click
+        });
 
         async function suggestEpisode(sitcom) {
             try {
@@ -540,6 +546,7 @@
                 document.getElementById('showInput').value = '';
                 document.getElementById('suggestions').innerHTML = '';
                 document.getElementById('suggestions').style.display = 'none';
+                navigator.vibrate(100); // Vibrate on adding a show
             } catch (error) {
                 alert('Sorry, an error occurred while adding the show. Please try again later.');
             }
@@ -564,6 +571,7 @@
             removeIcon.onclick = (e) => {
                 e.stopPropagation();
                 removeSitcomCard(sitcomCard, show.name);
+                navigator.vibrate(100); // Vibrate on removing a show
             };
 
             sitcomCard.appendChild(img);
@@ -583,6 +591,7 @@
                 savedShows = savedShows.filter(show => show.name !== showName);
                 localStorage.setItem('savedShows', JSON.stringify(savedShows));
             }, 500);
+            navigator.vibrate(100); // Vibrate on card removal
         }
 
         async function predictiveSearch() {
@@ -611,6 +620,7 @@
                         document.getElementById('showInput').value = result.show.name;
                         suggestions.innerHTML = '';
                         suggestions.style.display = 'none';
+                        navigator.vibrate(100); // Vibrate on selecting a predictive search suggestion
                     };
                     suggestions.appendChild(li);
                 });
@@ -665,6 +675,7 @@
                         if (shakeMagnitude > shakeThreshold) {
                             lastShakeTime = currentShakeTime;
                             selectRandomSitcom(); // Suggest a random episode from added shows
+                            navigator.vibrate(300); // Vibrate on shake
                         }
                     }
                 });
@@ -675,6 +686,7 @@
             const query = encodeURIComponent(`${currentSitcom} best moments`);
             const youtubeLink = `https://www.youtube.com/results?search_query=${query}`;
             window.open(youtubeLink, '_blank');
+            navigator.vibrate(100); // Vibrate on opening best moments
         }
     </script>
 <footer style="font-size: 12px; color: #b3b3b3; margin-top: 20px; padding-bottom: 10px;">
@@ -682,5 +694,4 @@
     </footer>
 
 </html>
-
 
