@@ -483,6 +483,9 @@
             document.getElementById('episodeOverlay').style.display = 'flex';
             document.getElementById('sitcomName').innerText = sitcom.charAt(0).toUpperCase() + sitcom.slice(1);
             updateBannerImage(sitcom);
+            // Always show description when opening the overlay
+            document.getElementById('bestMomentsVideo').style.display = 'none';
+            document.querySelector('#episodeInfo p').style.display = 'block';
             suggestEpisode(sitcom);
             navigator.vibrate(100); // Vibrate on sitcom selection
         }
@@ -498,6 +501,9 @@
         }
 
         document.getElementById('suggestButton').addEventListener('click', () => {
+            // Hide best moments video and show description
+            document.getElementById('bestMomentsVideo').style.display = 'none';
+            document.querySelector('#episodeInfo p').style.display = 'block';
             suggestEpisode(currentSitcom);
             navigator.vibrate(100); // Vibrate on resuggest button click
         });
@@ -686,11 +692,12 @@
         async function loadBestMoments() {
             try {
                 const query = encodeURIComponent(`${currentSitcom} best moments`);
-                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=AIzaSyDnIdX10L4Wzp6v829sS3pRRdduaWZ0hTM&maxResults=1`);
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=AIzaSyDnIdX10L4Wzp6v829sS3pRRdduaWZ0hTM&maxResults=5`);
                 const data = await response.json();
                 
                 if (data.items && data.items.length > 0) {
-                    const videoId = data.items[0].id.videoId;
+                    const randomIndex = Math.floor(Math.random() * data.items.length);
+                    const videoId = data.items[randomIndex].id.videoId;
                     const videoUrl = `https://www.youtube.com/embed/${videoId}`;
                     
                     // Display the video in the iframe
@@ -711,5 +718,6 @@
     </footer>
 </body>
 </html>
+
 
 
