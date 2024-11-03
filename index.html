@@ -36,7 +36,7 @@
             max-width: 800px;
             line-height: 1.5;
             margin-bottom: 30px;
-            text-align: justify;
+            text-align: center;
         }
 
         .carousel-container {
@@ -443,13 +443,14 @@
                 </div>
             </div>
             <div class="episode-info" id="episodeInfo">
-                <p>Mitch and Jay separately seek out a much-needed retreat from their families, and end up at the same resort. Meanwhile, Phil and Claire can't seem to enjoy the empty-nester life, and Cam, not knowing what to do with himself while Mitch is away, drops in on Gloria's to lend a hand.</p>
+                <p>Mitch and Jay separately seek out a much-needed retreat from their families...</p>
+                <iframe id="bestMomentsVideo" width="100%" height="315" style="display: none;" frameborder="0" allowfullscreen></iframe>
                 <div class="button-container">
                     <div class="button-row">
                         <button id="suggestButton">Resuggest</button>
-                        <button id="bestMomentsButton" onclick="openBestMoments()">Best Moments</button>
+                        <button id="bestMomentsButton" onclick="loadBestMoments()">Best Moments</button>
                     </div>
-                    <button id="watchLink" onclick="" class="watch-button">Watch Episode</button>
+                    <button id="watchLink" class="watch-button">Watch Episode</button>
                 </div>
             </div>
         </div>
@@ -682,16 +683,33 @@
             }
         }
 
-        function openBestMoments() {
-            const query = encodeURIComponent(`${currentSitcom} best moments`);
-            const youtubeLink = `https://www.youtube.com/results?search_query=${query}`;
-            window.open(youtubeLink, '_blank');
-            navigator.vibrate(100); // Vibrate on opening best moments
+        async function loadBestMoments() {
+            try {
+                const query = encodeURIComponent(`${currentSitcom} best moments`);
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=AIzaSyDnIdX10L4Wzp6v829sS3pRRdduaWZ0hTM&maxResults=1`);
+                const data = await response.json();
+                
+                if (data.items && data.items.length > 0) {
+                    const videoId = data.items[0].id.videoId;
+                    const videoUrl = `https://www.youtube.com/embed/${videoId}`;
+                    
+                    // Display the video in the iframe
+                    const bestMomentsVideo = document.getElementById('bestMomentsVideo');
+                    bestMomentsVideo.src = videoUrl;
+                    bestMomentsVideo.style.display = 'block';
+                    
+                    // Hide description text when video is shown
+                    document.querySelector('#episodeInfo p').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error fetching best moments video:', error);
+            }
         }
     </script>
 <footer style="font-size: 12px; color: #b3b3b3; margin-top: 20px; padding-bottom: 10px;">
         Built by <a href="https://www.linkedin.com/in/gowthamoleti" style="color: #b3b3b3; text-decoration: none;" target="_blank">Gowtham Oleti</a>
     </footer>
-
+</body>
 </html>
+
 
