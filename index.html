@@ -239,8 +239,30 @@
         .button-container {
             display: flex;
             flex-direction: column;
-            align-items: stretch;
+            gap: 10px;
             margin-top: 20px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        #suggestButton, #bestMomentsButton {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #444;
+            color: #fff;
+            transition: background-color 0.2s;
+        }
+
+        #suggestButton:hover, #bestMomentsButton:hover {
+            background-color: #333;
         }
 
         button, .watch-button {
@@ -395,7 +417,10 @@
             <div class="episode-info" id="episodeInfo">
                 <p>Mitch and Jay separately seek out a much-needed retreat from their families, and end up at the same resort. Meanwhile, Phil and Claire can't seem to enjoy the empty-nester life, and Cam, not knowing what to do with himself while Mitch is away, drops in on Gloria's to lend a hand.</p>
                 <div class="button-container">
-                    <button id="suggestButton">Resuggest</button>
+                    <div class="button-row">
+                        <button id="suggestButton">Resuggest</button>
+                        <button id="bestMomentsButton" onclick="openBestMoments()">Best Moments</button>
+                    </div>
                     <button id="watchLink" onclick="" class="watch-button">Watch Episode</button>
                     <span onclick="closeOverlay()" class="close-button">Close</span>
                 </div>
@@ -612,6 +637,12 @@
                     }
                 });
             }
+        }
+
+        function openBestMoments() {
+            const query = encodeURIComponent(`${currentSitcom} best moments`);
+            const youtubeLink = `https://www.youtube.com/results?search_query=${query}`;
+            window.open(youtubeLink, '_blank');
         }
     </script>
 <footer style="font-size: 12px; color: #b3b3b3; margin-top: 20px; padding-bottom: 10px;">
