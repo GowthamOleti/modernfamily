@@ -249,7 +249,7 @@
             gap: 10px;
         }
 
-        #suggestButton, #bestMomentsButton {
+        #suggestButton, #bestMomentsButton, #watchLink {
             flex: 1;
             padding: 15px;
             font-size: 16px;
@@ -260,9 +260,13 @@
             color: #fff;
             transition: background-color 0.2s;
             border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
         }
 
-        #suggestButton:hover, #bestMomentsButton:hover {
+        #suggestButton:hover, #bestMomentsButton:hover, #watchLink:hover {
             background-color: #1a1a1a;
         }
 
@@ -276,12 +280,12 @@
             cursor: pointer;
             border-radius: 15px;
             transition: background-color 0.2s;
-            margin: 10px 0;
             text-decoration: none;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 50px;
         }
 
         button:hover, .watch-button:hover {
@@ -289,15 +293,25 @@
             color: #fff;
         }
 
-        .close-button {
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 20px;
+        .overlay-close {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #888;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            font-size: 16px;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .overlay-close:hover {
+            background: rgba(255, 0, 0, 0.8);
         }
 
         @media (max-width: 768px) {
@@ -313,6 +327,7 @@
             button, .watch-button {
                 font-size: 14px;
                 padding: 12px;
+                height: 40px;
             }
             .sitcom-card img {
                 height: 300px;
@@ -354,6 +369,7 @@
             align-items: center;
             justify-content: center;
             width: auto;
+            height: 50px;
         }
 
         #addShowButton:hover {
@@ -408,6 +424,7 @@
     <div class="grid" id="sitcomGrid"></div>
 
     <div class="overlay" id="episodeOverlay">
+        <button class="overlay-close" onclick="closeOverlay()">&times;</button>
         <div class="container">
             <div class="banner" id="banner">
                 <div class="episode-text">
@@ -423,7 +440,6 @@
                         <button id="bestMomentsButton" onclick="openBestMoments()">Best Moments</button>
                     </div>
                     <button id="watchLink" onclick="" class="watch-button">Watch Episode</button>
-                    <span onclick="closeOverlay()" class="close-button">Close</span>
                 </div>
             </div>
         </div>
@@ -651,5 +667,6 @@
     </footer>
 
 </html>
+
 
 
