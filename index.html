@@ -245,6 +245,12 @@
             color: #b3b3b3;
         }
 
+        .episode-info .episode-meta {
+            color: #fff;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
         .button-container {
             display: flex;
             flex-direction: column;
@@ -443,8 +449,7 @@
             </div>
             <div class="episode-info" id="episodeInfo">
                 <p id="episodeSummary">Mitch and Jay separately seek out a much-needed retreat from their families...</p>
-                <p id="episodeDuration">Duration: 25 minutes</p>
-                <p id="episodeGenre">Genre: Comedy, Family</p>
+                <p class="episode-meta" id="episodeMeta">20 mins &middot; Comedy</p>
                 <iframe id="bestMomentsVideo" width="100%" height="315" style="display: none;" frameborder="0" allowfullscreen></iframe>
                 <div class="button-container">
                     <div class="button-row">
@@ -527,11 +532,8 @@
                 // Update episode summary
                 document.getElementById('episodeSummary').innerHTML = episode.summary;
                 
-                // Update episode duration
-                document.getElementById('episodeDuration').innerText = `Duration: ${episode.runtime} minutes`;
-                
-                // Update episode genre
-                document.getElementById('episodeGenre').innerText = `Genre: ${show.genres.join(', ')}`;
+                // Update episode duration and genre
+                document.getElementById('episodeMeta').innerText = `${episode.runtime} mins · ${show.genres.join(', ')}`;
 
                 // Update banner image with episode image if available
                 const episodeImage = episode.image ? episode.image.original : show.image.original;
@@ -730,7 +732,6 @@
     </footer>
 </body>
 </html>
-
 
 
 
