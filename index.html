@@ -200,7 +200,6 @@
         }
 
         .banner {
-            background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('https://static.wixstatic.com/media/5c0589_16e6f170547741d8b07c13eb4c289f90~mv2.jpg');
             background-size: cover;
             background-position: center;
             height: 300px;
@@ -443,7 +442,9 @@
                 </div>
             </div>
             <div class="episode-info" id="episodeInfo">
-                <p>Mitch and Jay separately seek out a much-needed retreat from their families...</p>
+                <p id="episodeSummary">Mitch and Jay separately seek out a much-needed retreat from their families...</p>
+                <p id="episodeDuration">Duration: 25 minutes</p>
+                <p id="episodeGenre">Genre: Comedy, Family</p>
                 <iframe id="bestMomentsVideo" width="100%" height="315" style="display: none;" frameborder="0" allowfullscreen></iframe>
                 <div class="button-container">
                     <div class="button-row">
@@ -524,7 +525,18 @@
                 document.getElementById('episodeTitle').innerText = `Season: ${episode.season} Episode: ${episode.number}`;
                 
                 // Update episode summary
-                document.querySelector('.episode-info p').innerHTML = episode.summary;
+                document.getElementById('episodeSummary').innerHTML = episode.summary;
+                
+                // Update episode duration
+                document.getElementById('episodeDuration').innerText = `Duration: ${episode.runtime} minutes`;
+                
+                // Update episode genre
+                document.getElementById('episodeGenre').innerText = `Genre: ${show.genres.join(', ')}`;
+
+                // Update banner image with episode image if available
+                const episodeImage = episode.image ? episode.image.original : show.image.original;
+                document.querySelector('.banner').style.backgroundImage = `linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1)), url('${episodeImage}')`;
+
                 const imdbLink = episode.url ? episode.url : `https://www.imdb.com/title/${show.externals.imdb}`;
                 document.getElementById('watchLink').onclick = function() { window.open(imdbLink, '_blank'); };
                 
